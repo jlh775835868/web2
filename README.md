@@ -1,1 +1,1 @@
-<a href="/SeatSearch.html">SeatSearch</a>
+<a href="SeatSearch.html">SeatSearch</a>
