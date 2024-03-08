@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇游戏</title>
+    <style>
+        #game-board {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+            position: relative;
+        }
+
+        .snake, .food {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+        }
+
+        .snake {
+            background-color: #00f;
+        }
+
+        .food {
+            background-color: #f00;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-board"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const gameBoard = document.getElementById('game-board');
+            let snake = [{ x: 0, y: 0 }];
+            let food = generateFood();
+
+            function render() {
+                gameBoard.innerHTML = '';
+
+                snake.forEach(segment => {
+                    const snakeSegment = document.createElement('div');
+                    snakeSegment.className = 'snake';
+                    snakeSegment.style.left = segment.x * 20 + 'px';
+                    snakeSegment.style.top = segment.y * 20 + 'px';
+                    gameBoard.appendChild(snakeSegment);
+                });
+
+                const foodElement = document.createElement('div');
+                foodElement.className = 'food';
+                foodElement.style.left = food.x * 20 + 'px';
+                foodElement.style.top = food.y * 20 + 'px';
+                gameBoard.appendChild(foodElement);
+            }
+
+            function generateFood() {
+                const x = Math.floor(Math.random() * 15);
+                const y = Math.floor(Math.random() * 15);
+                return { x, y };
+            }
+
+            function moveSnake() {
+                const head = { ...snake[0] };
+                switch (direction) {
+                    case 'up':
+                        head.y -= 1;
+                        break;
+                    case 'down':
+                        head.y += 1;
+                        break;
+                    case 'left':
+                        head.x -= 1;
+                        break;
+                    case 'right':
+                        head.x += 1;
+                        break;
+                }
+
+                snake.unshift(head);
+
+                if (head.x === food.x && head.y === food.y) {
+                    food = generateFood();
+                } else {
+                    snake.pop();
+                }
+            }
+
+            function checkCollision() {
+                const head = snake[0];
+                return (
+                    head.x < 0 || head.x >= 15 ||
+                    head.y < 0 || head.y >= 15 ||
+                    snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
+                );
+            }
+
+            function gameOver() {
+                alert('游戏结束！');
+                snake = [{ x: 0, y: 0 }];
+                food = generateFood();
+                direction = 'right';
+            }
+
+            let direction = 'right';
+
+            document.addEventListener('keydown', function (event) {
+                switch (event.key) {
+                    case 'ArrowUp':
+                        direction = 'up';
+                        break;
+                    case 'ArrowDown':
+                        direction = 'down';
+                        break;
+                    case 'ArrowLeft':
+                        direction = 'left';
+                        break;
+                    case 'ArrowRight':
+                        direction = 'right';
+                        break;
+                }
+            });
+
+            function gameLoop() {
+                moveSnake();
+                render();
+
+                if (checkCollision()) {
+                    gameOver();
+                } else {
+                    setTimeout(gameLoop, 200);
+                }
+            }
+
+            gameLoop();
+        });
+    </script>
+</body>
+</html>
