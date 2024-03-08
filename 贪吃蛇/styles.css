@@ -1,0 +1,95 @@
+const board = document.getElementById('game-board');
+const width = board.offsetWidth;
+const height = board.offsetHeight;
+const snake = [{x: 10, y: 10}]; // ÉßµÄ³õÊ¼Î»ÖÃ
+const food = {x: Math.floor(Math.random() * width / 20), y: Math.floor(Math.random() * height / 20)}; // Ê³ÎïµÄ³õÊ¼Î»ÖÃ
+const dx = 20; // ÉßÃ¿´ÎÒÆ¶¯µÄ¾àÀë
+const dy = 20;
+const board = document.getElementById('game-board');
+const width = board.offsetWidth;
+const height = board.offsetHeight;
+const snake = [{x: 10, y: 10}]; // è›‡çš„åˆå§‹ä½ç½®
+const food = {x: Math.floor(Math.random() * width / 20), y: Math.floor(Math.random() * height / 20)}; // é£Ÿç‰©çš„åˆå§‹ä½ç½®
+const dx = 20; // è›‡æ¯æ¬¡ç§»åŠ¨çš„è·ç¦»
+const dy = 20;
+
+function drawSnake() {
+  board.innerHTML = ''; // æ¸…é™¤ä¹‹å‰çš„è›‡
+  snake.forEach(segment => {
+    const div = document.createElement('div');
+    div.className = 'snake';
+    div.style.left = `${segment.x}px`;
+    div.style.top = `${segment.y}px`;
+    board.appendChild(div);
+  });
+}
+
+function moveSnake() {
+  const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+  snake.unshift(head); // ç§»åŠ¨è›‡å¤´
+  if (head.x === food.x && head.y === food.y) {
+    // å¦‚æœè›‡å¤´ç¢°åˆ°é£Ÿç‰©ï¼Œå¢åŠ è›‡çš„é•¿åº¦
+    food = {x: Math.floor(Math.random() * width / 20), y: Math.floor(Math.random() * height / 20)};
+  } else {
+    // å¦åˆ™ï¼Œç§»é™¤è›‡å°¾
+    snake.pop();
+  }
+}
+
+function checkCollision() {
+  // æ£€æŸ¥è›‡å¤´æ˜¯å¦æ’åˆ°è¾¹ç•Œæˆ–è‡ªå·±çš„èº«ä½“
+  const head = snake[0];
+  if (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height || snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)) {
+    // æ¸¸æˆç»“æŸé€»è¾‘
+    alert('æ¸¸æˆç»“æŸï¼');
+  }
+}
+
+// æ¸¸æˆå¾ªç¯
+setInterval(() => {
+  moveSnake();
+  checkCollision();
+  drawSnake();
+}, 200);
+
+drawSnake(); // åˆå§‹åŒ–æ¸¸æˆ
+function drawSnake() {
+  board.innerHTML = ''; // Çå³ıÖ®Ç°µÄÉß
+  snake.forEach(segment => {
+    const div = document.createElement('div');
+    div.className = 'snake';
+    div.style.left = `${segment.x}px`;
+    div.style.top = `${segment.y}px`;
+    board.appendChild(div);
+  });
+}
+
+function moveSnake() {
+  const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+  snake.unshift(head); // ÒÆ¶¯ÉßÍ·
+  if (head.x === food.x && head.y === food.y) {
+    // Èç¹ûÉßÍ·Åöµ½Ê³Îï£¬Ôö¼ÓÉßµÄ³¤¶È
+    food = {x: Math.floor(Math.random() * width / 20), y: Math.floor(Math.random() * height / 20)};
+  } else {
+    // ·ñÔò£¬ÒÆ³ıÉßÎ²
+    snake.pop();
+  }
+}
+
+function checkCollision() {
+  // ¼ì²éÉßÍ·ÊÇ·ñ×²µ½±ß½ç»ò×Ô¼ºµÄÉíÌå
+  const head = snake[0];
+  if (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height || snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)) {
+    // ÓÎÏ·½áÊøÂß¼­
+    alert('ÓÎÏ·½áÊø£¡');
+  }
+}
+
+// ÓÎÏ·Ñ­»·
+setInterval(() => {
+  moveSnake();
+  checkCollision();
+  drawSnake();
+}, 200);
+
+drawSnake(); // ³õÊ¼»¯ÓÎÏ·
